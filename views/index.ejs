@@ -19,7 +19,8 @@
     <div class="container mx-auto">
         <div class="header w-full flex flex-col gap-2">
             <h1 class="font-bold text-2xl">Braintree Transaction Search</h1>
-            <a href="https://developer.paypal.com/braintree/docs/reference/general/searching/search-fields/node" target="_blank" class="underline text-blue-600 hover:text-blue-800">Documentation</a>
+            <a href="https://developer.paypal.com/braintree/docs/reference/general/searching/search-fields/node"
+                target="_blank" class="underline text-blue-600 hover:text-blue-800">Documentation</a>
         </div>
         <div class="flex flex-col pb-5">
             <div id="accordion" class="p-5">
@@ -38,12 +39,16 @@
 
                     <div id="collapseOne" class="hidden" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="flex-auto p-6">
-                            Min : <input id="inputMinValue" type="text" value=10>
-                            Max : <input id="inputMaxValue" type="text" value=100>
+                            Min : <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                                id="inputMinValue" type="text" value=10>
+                            Max : <input
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                                id="inputMaxValue" type="text" value=100>
                             <br>
                             <br>
                             <input type="button" value="Submit"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                class="border border-gray-300 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                 onclick="searchResult('minmax')">
                         </div>
                     </div>
@@ -63,7 +68,8 @@
                     <div id="collapseTwo" class="hidden" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div class="flex-auto p-6">
                             Status is :
-                            <select id="statusIs" name="cars">
+                            <select id="statusIs" name="cars"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                                 <option value="SETTLED">SETTLED</option>
                                 <option value="GATEWAY_REJECTED">GATEWAY_REJECTED</option>
                             </select>
@@ -89,10 +95,13 @@
                         </div>
                         <div id="collapseThree" class="hidden" aria-labelledby="headingThree" data-parent="#accordion">
                             <div class="flex-auto p-6">
-                                Min : <input id="inputMinValueSA" type="text" value=10>
-                                Max : <input id="inputMaxValueSA" type="text" value=100>
+                                Min : <input id="inputMinValueSA" type="text" value=10
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                                Max : <input id="inputMaxValueSA" type="text" value=100
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                                 Status is :
-                                <select id="statusIsSA" name="cars">
+                                <select id="statusIsSA" name="cars"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                                     <option value="SETTLED">SETTLED</option>
                                     <option value="GATEWAY_REJECTED">GATEWAY_REJECTED</option>
                                 </select>
@@ -120,14 +129,33 @@
                         <div id="collapseFour" class="hidden" aria-labelledby="headingThree" data-parent="#accordion">
                             <div class="flex-auto p-6">
                                 From : <input type="datetime-local" id="startDate" name="startDate"
-                                    value="2024-01-01T00:00" min="2018-06-07T00:00">
+                                    value="2024-01-01T00:00" min="2018-06-07T00:00"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                                 To : <input type="datetime-local" id="endDate" name="endDate" value="2023-07-15T23:59"
-                                    min="2018-06-07T00:00">
+                                    min="2018-06-07T00:00"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                                 <br>
                                 <br>
                                 <input type="button" value="Submit"
                                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                                     onclick="searchResult('FromToDate')">
+
+
+                                <div class="my-2">
+                                    <label for="end_date"
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presets
+                                        :</label>
+                                    <div class="flex">
+                                        <button type="button" id="todayButton"
+                                            class="mr-2 p-2 bg-green-500 text-white rounded-md">Today</button>
+                                        <button type="button" id="yesterdayButton"
+                                            class="mr-2 p-2 bg-green-500 text-white rounded-md">Yesterday</button>
+                                        <button type="button" id="last7DaysButton"
+                                            class="mr-2 p-2 bg-green-500 text-white rounded-md">Last 7 Days</button>
+                                        <button type="button" id="lastMonthButton"
+                                            class="p-2 bg-green-500 text-white rounded-md">Last Month</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

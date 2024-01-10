@@ -113,3 +113,57 @@ function toggleCollapse(id) {
         element.classList.add('hidden');
     }
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    // Ajoutez ces événements pour les boutons de presets
+    document.getElementById('todayButton').addEventListener('click', function () {
+        var endDate = new Date();
+        var startDate = new Date();
+
+        // Définir l'heure de début à 00:00:00
+        startDate.setHours(0, 0, 0, 0);
+
+        document.getElementById('startDate').value = startDate.toISOString().slice(0, -8);
+        document.getElementById('endDate').value = endDate.toISOString().slice(0, -8);
+    });
+
+    document.getElementById('yesterdayButton').addEventListener('click', function () {
+        var endDate = new Date();
+        var startDate = new Date();
+        startDate.setDate(startDate.getDate() - 1);
+    
+        // Définir l'heure de début à 00:00:00
+        startDate.setHours(0, 0, 0, 0);
+    
+        document.getElementById('startDate').value = startDate.toISOString().slice(0, -8);
+        document.getElementById('endDate').value = endDate.toISOString().slice(0, -8);
+    });
+    
+
+    document.getElementById('last7DaysButton').addEventListener('click', function () {
+        var endDate = new Date();
+        var startDate = new Date();
+        startDate.setDate(startDate.getDate() - 7);
+
+        // Définir l'heure de début à 00:00:00
+        startDate.setHours(0, 0, 0, 0);
+
+        document.getElementById('startDate').value = startDate.toISOString().slice(0, -8);
+        document.getElementById('endDate').value = endDate.toISOString().slice(0, -8);
+    });
+
+    document.getElementById('lastMonthButton').addEventListener('click', function () {
+        var endDate = new Date();
+        var startDate = new Date();
+        startDate.setMonth(startDate.getMonth() - 1);
+
+        // Définir l'heure de début à 00:00:00
+        startDate.setHours(0, 0, 0, 0);
+
+        document.getElementById('startDate').value = startDate.toISOString().slice(0, -8);
+        document.getElementById('endDate').value = endDate.toISOString().slice(0, -8);
+    });
+
+});
