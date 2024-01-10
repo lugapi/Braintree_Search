@@ -120,9 +120,124 @@ app.post("/searchTransaction", async (req, res) => {
   }
 });
 
-app.get("/", async (req, res) => {
+// Endpoint pour gérer la recherche des clients
+app.post('/searchCustomer', async (req, res) => {
+  try {
+    let collection;
+    const resultSearch = [];
+
+    // Vérifier les différents critères de recherche fournis dans le corps de la requête
+    if (req.body.firstName && req.body.lastName) {
+      // Recherche par prénom et nom de famille
+      const firstName = req.body.firstName;
+      const lastName = req.body.lastName;
+
+      collection = gateway.customer.search((search) => {
+        search.firstName().is(firstName);
+        search.lastName().is(lastName);
+      });
+    } else if (req.body.customerId) {
+      // Recherche par ID client
+      const customerId = req.body.customerId;
+
+      collection = gateway.customer.search((search) => {
+        search.id().is(customerId);
+      });
+    } else if (req.body.email) {
+      // Recherche par e-mail client
+      const customerEmail = req.body.email;
+
+      console.log(req.body.email)
+
+      collection = gateway.customer.search((search) => {
+        search.email().is(customerEmail);
+      });
+    } else if (req.body.createdAtStartDate && req.body.createdAtEndDate) {
+      // Recherche par plage de dates de création
+      const createdAtStartDate = req.body.createdAtStartDate;
+      const createdAtEndDate = req.body.createdAtEndDate;
+
+      collection = gateway.customer.search((search) => {
+        search.createdAt().between(createdAtStartDate, createdAtEndDate);
+      });
+    } else if (req.body.PMToken) {
+      // Recherche par PM Token
+      const PMToken = req.body.PMToken;
+
+      collection = gateway.customer.search((search) => {
+        search.paymentMethodToken().is(PMToken);
+      });
+    }
+
+    // Processus des résultats de la recherche
+    collection.on('data', (customer) => {
+      resultSearch.push({
+        id: customer.id,
+        firstName: customer.firstName,
+        lastName: customer.lastName,
+        createdAt: customer.createdAt,
+        email: customer.email,
+        phone: customer.phone,
+        link: `https://sandbox.braintreegateway.com/merchants/${BRAINTREE_MERCHANT_ID}/customers/${customer.id}`
+      });
+    });
+
+    // Envoyer les résultats de la recherche en tant que réponse JSON lorsque la recherche est terminée
+    collection.on('end', () => {
+      res.json(resultSearch);
+    });
+
+    // Reprendre le flux de recherche
+    collection.resume();
+  } catch (error) {
+    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Endpoint pour trouver un client par ID
+app.post('/findCustomer', async (req, res) => {
+  try {
+    const customerId = req.body.customerId;
+
+    // Vérifier si customerId est présent dans la requête
+    if (!customerId) {
+      return res.status(400).json({ error: 'Missing customerId parameter' });
+    }
+
+    // Utiliser la méthode find pour rechercher le client par ID
+    gateway.customer.find(customerId, (err, customer) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+
+      if (!customer) {
+        return res.status(404).json({ error: 'Customer not found' });
+      }
+
+      // Renvoyer le client trouvé en tant que réponse JSON
+      res.json(customer);
+    });
+  } catch (error) {
+    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get("/transaction", async (req, res) => {
   // render paypal view
-  res.render("index", {
+  res.render("transaction", {
+    currency: BRAINTREE_CURRENCY,
+    MID: BRAINTREE_MERCHANT_ID,
+  })
+});
+
+app.get("/customer", async (req, res) => {
+  // render paypal view
+  res.render("customer", {
     currency: BRAINTREE_CURRENCY,
     MID: BRAINTREE_MERCHANT_ID,
   })

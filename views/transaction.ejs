@@ -128,19 +128,6 @@
                         </div>
                         <div id="collapseFour" class="hidden" aria-labelledby="headingThree" data-parent="#accordion">
                             <div class="flex-auto p-6">
-                                From : <input type="datetime-local" id="startDate" name="startDate"
-                                    value="2024-01-01T00:00" min="2018-06-07T00:00"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                                To : <input type="datetime-local" id="endDate" name="endDate" value="2023-07-15T23:59"
-                                    min="2018-06-07T00:00"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                                <br>
-                                <br>
-                                <input type="button" value="Submit"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    onclick="searchResult('FromToDate')">
-
-
                                 <div class="my-2">
                                     <label for="end_date"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presets
@@ -156,13 +143,23 @@
                                             class="p-2 bg-green-500 text-white rounded-md">Last Month</button>
                                     </div>
                                 </div>
+                                From : <input type="datetime-local" id="startDate" name="startDate"
+                                    value="2024-01-01T00:00" min="2018-06-07T00:00"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                                To : <input type="datetime-local" id="endDate" name="endDate" value="2023-07-15T23:59"
+                                    min="2018-06-07T00:00"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                                <br>
+                                <br>
+                                <input type="button" value="Submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    onclick="searchResult('FromToDate')">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="flex flex-wrap">
-                <!-- <div class="relative flex-grow max-w-full flex-1 px-4"> -->
                 <div class="result w-full overflow-x-auto" hidden>
                     <br><br><br>
                     <p id="nbRowP" hidden>Number of rows : <span id="nbRowS" hidden></span></p>
@@ -183,7 +180,6 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- </div> -->
             </div>
         </div>
     </div>
@@ -193,6 +189,6 @@
     const mid = '<%= MID %>'
 </script>
 
-<script src="app.js"></script>
+<script src="transaction.js"></script>
 
 </html>
