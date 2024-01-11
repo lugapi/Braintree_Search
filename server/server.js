@@ -116,7 +116,9 @@ app.post("/searchTransaction", async (req, res) => {
   } catch (error) {
     // Handle errors and send a 500 Internal Server Error response
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
   }
 });
 
@@ -192,7 +194,9 @@ app.post('/searchCustomer', async (req, res) => {
   } catch (error) {
     // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
   }
 });
 
@@ -203,18 +207,24 @@ app.post('/findCustomer', async (req, res) => {
 
     // Vérifier si customerId est présent dans la requête
     if (!customerId) {
-      return res.status(400).json({ error: 'Missing customerId parameter' });
+      return res.status(400).json({
+        error: 'Missing customerId parameter'
+      });
     }
 
     // Utiliser la méthode find pour rechercher le client par ID
     gateway.customer.find(customerId, (err, customer) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({
+          error: 'Internal Server Error'
+        });
       }
 
       if (!customer) {
-        return res.status(404).json({ error: 'Customer not found' });
+        return res.status(404).json({
+          error: 'Customer not found'
+        });
       }
 
       // Renvoyer le client trouvé en tant que réponse JSON
@@ -223,24 +233,33 @@ app.post('/findCustomer', async (req, res) => {
   } catch (error) {
     // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
     console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
   }
 });
 
+
 app.get("/transaction", async (req, res) => {
-  // render paypal view
-  res.render("transaction", {
+  res.render('template', {
+    body: 'transaction',
     currency: BRAINTREE_CURRENCY,
     MID: BRAINTREE_MERCHANT_ID,
-  })
+  });
 });
 
 app.get("/customer", async (req, res) => {
-  // render paypal view
-  res.render("customer", {
+  res.render('template', {
+    body: 'customer',
     currency: BRAINTREE_CURRENCY,
     MID: BRAINTREE_MERCHANT_ID,
-  })
+  });
+});
+
+app.get("/", async (req, res) => {
+  res.render('template', {
+    body: 'index',
+  });
 });
 
 app.listen(PORT, () => {

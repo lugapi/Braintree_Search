@@ -112,7 +112,7 @@ function searchCustomers(button) {
                 for (var i = 0; i < data.length; i++) {
                     colorText = "black";
                     color = "aliceblue";
-                    document.querySelector('.tableContent').innerHTML += "<tr style='color: " + colorText + ";background-color: " + color + ";' class='border-b dark:border-neutral-500'><td class='whitespace-nowrap px-6 py-4'>" + data[i].id + "</td><td><button class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' onclick=\"searchCustomer('" + data[i].id + "')\">GET DETAILS</button></td><td>" + data[i].firstName + "</td><td>" + data[i].lastName + "</td><td>" + data[i].phone + "</td><td>" + data[i].email + "</td><td>" + data[i].createdAt.date + "</td><td><a class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' href='" + data[i].link + "'>Link to BO</a></td></tr>";
+                    document.querySelector('.tableContent').innerHTML += "<tr style='color: " + colorText + ";background-color: " + color + ";' class='border-b dark:border-neutral-500'><td class='whitespace-nowrap px-6 py-4'>" + data[i].id + "</td><td><button class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' onclick=\"searchCustomer('" + data[i].id + "')\">GET DETAILS</button></td><td>" + data[i].firstName + "</td><td>" + data[i].lastName + "</td><td>" + data[i].phone + "</td><td>" + data[i].email + "</td><td>" + data[i].createdAt + "</td><td><a class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' href='" + data[i].link + "'>Link to BO</a></td></tr>";
 
                 }
             }

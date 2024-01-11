@@ -1,74 +1,88 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome To Braintree</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="commonFront.js"></script>
-</head>
-
-<body>
-    <div id="loading" hidden class="top-0 left-0 w-full h-full items-center justify-center z-50">
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <p class="text-center text-gray-700 text-xl font-bold mb-2">LOADING...</p>
-            <div class="loader mx-auto"></div>
-        </div>
+<div class="container mx-auto">
+    <div class="header w-full flex flex-col gap-2">
+        <h1 class="font-bold text-2xl">Braintree Transaction Search</h1>
+        <a href="https://developer.paypal.com/braintree/docs/reference/general/searching/search-fields/node"
+            target="_blank" class="underline text-blue-600 hover:text-blue-800">Documentation</a>
     </div>
-    <div class="container mx-auto">
-        <div class="header w-full flex flex-col gap-2">
-            <h1 class="font-bold text-2xl">Braintree Transaction Search</h1>
-            <a href="https://developer.paypal.com/braintree/docs/reference/general/searching/search-fields/node"
-                target="_blank" class="underline text-blue-600 hover:text-blue-800">Documentation</a>
-        </div>
-        <div class="flex flex-col pb-5">
-            <div id="accordion" class="p-5">
-                <div
-                    class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
-                    <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900" id="headingOne">
-                        <h5 class="mb-0">
-                            <button
-                                class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent"
-                                data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                                aria-controls="collapseOne" onclick="toggleCollapse('collapseOne')">
-                                Search with min & max amount values
-                            </button>
-                        </h5>
-                    </div>
+    <div class="flex flex-col pb-5">
+        <div id="accordion" class="p-5">
+            <div
+                class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
+                <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900" id="headingOne">
+                    <h5 class="mb-0">
+                        <button
+                            class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent"
+                            data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
+                            aria-controls="collapseOne" onclick="toggleCollapse('collapseOne')">
+                            Search with min & max amount values
+                        </button>
+                    </h5>
+                </div>
 
-                    <div id="collapseOne" class="hidden" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div class="flex-auto p-6">
-                            Min : <input
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                                id="inputMinValue" type="text" value=10>
-                            Max : <input
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
-                                id="inputMaxValue" type="text" value=100>
-                            <br>
-                            <br>
-                            <input type="button" value="Submit"
-                                class="border border-gray-300 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                onclick="searchResult('minmax')">
-                        </div>
+                <div id="collapseOne" class="hidden" aria-labelledby="headingOne" data-parent="#accordion">
+                    <div class="flex-auto p-6">
+                        Min : <input
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                            id="inputMinValue" type="text" value=10>
+                        Max : <input
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                            id="inputMaxValue" type="text" value=100>
+                        <br>
+                        <br>
+                        <input type="button" value="Submit"
+                            class="border border-gray-300 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            onclick="searchResult('minmax')">
+                    </div>
+                </div>
+            </div>
+            <div
+                class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
+                <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900" id="headingTwo">
+                    <h5 class="mb-0">
+                        <button
+                            class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent collapsed"
+                            data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
+                            aria-controls="collapseTwo" onclick="toggleCollapse('collapseTwo')">
+                            Status
+                        </button>
+                    </h5>
+                </div>
+                <div id="collapseTwo" class="hidden" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div class="flex-auto p-6">
+                        Status is :
+                        <select id="statusIs" name="cars"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                            <option value="SETTLED">SETTLED</option>
+                            <option value="GATEWAY_REJECTED">GATEWAY_REJECTED</option>
+                        </select>
+                        <br>
+                        <br>
+                        <input type="button" value="Submit"
+                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            onclick="searchResult('statusIs')">
                     </div>
                 </div>
                 <div
                     class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
-                    <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900" id="headingTwo">
+                    <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900"
+                        id="headingThree">
                         <h5 class="mb-0">
                             <button
                                 class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent collapsed"
-                                data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false"
-                                aria-controls="collapseTwo" onclick="toggleCollapse('collapseTwo')">
-                                Status
+                                data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
+                                aria-controls="collapseThree" onclick="toggleCollapse('collapseThree')">
+                                Status is & amount min max
                             </button>
                         </h5>
                     </div>
-                    <div id="collapseTwo" class="hidden" aria-labelledby="headingTwo" data-parent="#accordion">
+                    <div id="collapseThree" class="hidden" aria-labelledby="headingThree" data-parent="#accordion">
                         <div class="flex-auto p-6">
+                            Min : <input id="inputMinValueSA" type="text" value=10
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                            Max : <input id="inputMaxValueSA" type="text" value=100
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                             Status is :
-                            <select id="statusIs" name="cars"
+                            <select id="statusIsSA" name="cars"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
                                 <option value="SETTLED">SETTLED</option>
                                 <option value="GATEWAY_REJECTED">GATEWAY_REJECTED</option>
@@ -77,118 +91,83 @@
                             <br>
                             <input type="button" value="Submit"
                                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                onclick="searchResult('statusIs')">
-                        </div>
-                    </div>
-                    <div
-                        class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
-                        <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900"
-                            id="headingThree">
-                            <h5 class="mb-0">
-                                <button
-                                    class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent collapsed"
-                                    data-toggle="collapse" data-target="#collapseThree" aria-expanded="false"
-                                    aria-controls="collapseThree" onclick="toggleCollapse('collapseThree')">
-                                    Status is & amount min max
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseThree" class="hidden" aria-labelledby="headingThree" data-parent="#accordion">
-                            <div class="flex-auto p-6">
-                                Min : <input id="inputMinValueSA" type="text" value=10
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                                Max : <input id="inputMaxValueSA" type="text" value=100
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                                Status is :
-                                <select id="statusIsSA" name="cars"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                                    <option value="SETTLED">SETTLED</option>
-                                    <option value="GATEWAY_REJECTED">GATEWAY_REJECTED</option>
-                                </select>
-                                <br>
-                                <br>
-                                <input type="button" value="Submit"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    onclick="searchResult('statusAndAmount')">
-                            </div>
-                        </div>
-                    </div>
-                    <div
-                        class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
-                        <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900"
-                            id="headingThree">
-                            <h5 class="mb-0">
-                                <button
-                                    class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent collapsed"
-                                    data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
-                                    aria-controls="collapseFour" onclick="toggleCollapse('collapseFour')">
-                                    Date
-                                </button>
-                            </h5>
-                        </div>
-                        <div id="collapseFour" class="hidden" aria-labelledby="headingThree" data-parent="#accordion">
-                            <div class="flex-auto p-6">
-                                <div class="my-2">
-                                    <label for="end_date"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presets
-                                        :</label>
-                                    <div class="flex">
-                                        <button type="button" id="todayButton"
-                                            class="mr-2 p-2 bg-green-500 text-white rounded-md">Today</button>
-                                        <button type="button" id="yesterdayButton"
-                                            class="mr-2 p-2 bg-green-500 text-white rounded-md">Yesterday</button>
-                                        <button type="button" id="last7DaysButton"
-                                            class="mr-2 p-2 bg-green-500 text-white rounded-md">Last 7 Days</button>
-                                        <button type="button" id="lastMonthButton"
-                                            class="p-2 bg-green-500 text-white rounded-md">Last Month</button>
-                                    </div>
-                                </div>
-                                From : <input type="datetime-local" id="startDate" name="startDate"
-                                    value="2024-01-01T00:00" min="2018-06-07T00:00"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                                To : <input type="datetime-local" id="endDate" name="endDate" value="2023-07-15T23:59"
-                                    min="2018-06-07T00:00"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
-                                <br>
-                                <br>
-                                <input type="button" value="Submit"
-                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                    onclick="searchResult('FromToDate')">
-                            </div>
+                                onclick="searchResult('statusAndAmount')">
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex flex-wrap">
-                <div class="result w-full overflow-x-auto" hidden>
-                    <br><br><br>
-                    <p id="nbRowP" hidden>Number of rows : <span id="nbRowS" hidden></span></p>
-                    <table class="min-w-full text-left text-sm font-light">
-                        <thead class="border-b font-medium dark:border-neutral-500 text-center">
-                            <tr>
-                                <th class="px-6 py-4">Transaction ID</th>
-                                <th class="px-6 py-4">Order ID</th>
-                                <th class="px-6 py-4">Date</th>
-                                <th class="px-6 py-4">Status</th>
-                                <th class="px-6 py-4">Amount</th>
-                                <th class="px-6 py-4">Payment Method</th>
-                                <th class="px-6 py-4">Link</th>
-                            </tr>
-                        </thead>
-                        <tbody class="tableContent text-center">
-                            <!-- content added via XHR result -->
-                        </tbody>
-                    </table>
+                <div
+                    class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
+                    <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900"
+                        id="headingThree">
+                        <h5 class="mb-0">
+                            <button
+                                class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent collapsed"
+                                data-toggle="collapse" data-target="#collapseFour" aria-expanded="false"
+                                aria-controls="collapseFour" onclick="toggleCollapse('collapseFour')">
+                                Date
+                            </button>
+                        </h5>
+                    </div>
+                    <div id="collapseFour" class="hidden" aria-labelledby="headingThree" data-parent="#accordion">
+                        <div class="flex-auto p-6">
+                            <div class="my-2">
+                                <label for="end_date"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presets
+                                    :</label>
+                                <div class="flex">
+                                    <button type="button" id="todayButton"
+                                        class="mr-2 p-2 bg-green-500 text-white rounded-md">Today</button>
+                                    <button type="button" id="yesterdayButton"
+                                        class="mr-2 p-2 bg-green-500 text-white rounded-md">Yesterday</button>
+                                    <button type="button" id="last7DaysButton"
+                                        class="mr-2 p-2 bg-green-500 text-white rounded-md">Last 7 Days</button>
+                                    <button type="button" id="lastMonthButton"
+                                        class="p-2 bg-green-500 text-white rounded-md">Last Month</button>
+                                </div>
+                            </div>
+                            From : <input type="datetime-local" id="startDate" name="startDate"
+                                value="2024-01-01T00:00" min="2018-06-07T00:00"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                            To : <input type="datetime-local" id="endDate" name="endDate" value="2023-07-15T23:59"
+                                min="2018-06-07T00:00"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5">
+                            <br>
+                            <br>
+                            <input type="button" value="Submit"
+                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                onclick="searchResult('FromToDate')">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="flex flex-wrap">
+            <div class="result w-full overflow-x-auto" hidden>
+                <br><br><br>
+                <p id="nbRowP" hidden>Number of rows : <span id="nbRowS" hidden></span></p>
+                <table class="min-w-full text-left text-sm font-light">
+                    <thead class="border-b font-medium dark:border-neutral-500 text-center">
+                        <tr>
+                            <th class="px-6 py-4">Transaction ID</th>
+                            <th class="px-6 py-4">Order ID</th>
+                            <th class="px-6 py-4">Date</th>
+                            <th class="px-6 py-4">Status</th>
+                            <th class="px-6 py-4">Amount</th>
+                            <th class="px-6 py-4">Payment Method</th>
+                            <th class="px-6 py-4">Link</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tableContent text-center">
+                        <!-- content added via XHR result -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-</body>
+</div>
 
 <script>
     const mid = '<%= MID %>'
 </script>
 
 <script src="transaction.js"></script>
-
-</html>
