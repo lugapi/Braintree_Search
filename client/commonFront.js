@@ -27,3 +27,28 @@ function toggleCollapse(id) {
         element.classList.add('hidden');
     }
 }
+
+function setLoader() {
+    document.querySelector('.container').style.opacity = '0.2';
+    document.querySelector('#loading').removeAttribute('hidden');
+}
+
+function removeLoader() {
+    document.querySelector('.container').style.opacity = '1';
+    document.querySelector('#loading').setAttribute('hidden', 'hidden');
+}
+
+// Function to set date range
+function setDateRange(startOffset, endOffset) {
+    var endDate = new Date();
+    var startDate = new Date();
+
+    startDate.setUTCDate(startDate.getUTCDate() - startOffset);
+    startDate.setUTCHours(0, 0, 0, 0);
+
+    endDate.setUTCDate(endDate.getUTCDate() - endOffset);
+    endDate.setUTCHours(0, 0, 0, 0);
+
+    document.getElementById('startDate').value = startDate.toISOString().slice(0, -8);
+    document.getElementById('endDate').value = endDate.toISOString().slice(0, -8);
+}

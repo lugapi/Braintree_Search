@@ -1,29 +1,28 @@
-function searchCustomer(id) {
+function searchDispute(id) {
     setLoader();
 
-    var customerId = id;
+    var disputeId = id;
 
-    // Utiliser la fonction fetch pour envoyer une requête POST
-    fetch("/findCustomer", {
+    fetch("/findDispute", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                customerId
+                disputeId
             }),
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error(`Customer not found or an error occurred: ${response.statusText}`);
+                throw new Error(`Dispute not found or an error occurred: ${response.statusText}`);
             }
             return response.json();
         })
         .then(data => {
             removeLoader();
             console.log(data);
-            document.getElementById('customerInfo').innerHTML = prettyPrintObject(data);
-            document.getElementById('customerInfo').classList.remove('hidden');
+            document.getElementById('disputeInfo').innerHTML = prettyPrintObject(data);
+            document.getElementById('disputeInfo').classList.remove('hidden');
             window.scrollTo({
                 top: 0,
                 behavior: 'smooth',
@@ -35,19 +34,14 @@ function searchCustomer(id) {
 }
 
 
-
 function searchCustomers(button) {
 
     setLoader();
 
     const searchType = button.getAttribute('data-search-type');
 
-    let firstName = document.getElementById('inputFirstName').value ? document.getElementById('inputFirstName').value : "";
-    let lastName = document.getElementById('inputLastName').value ? document.getElementById('inputLastName').value : "";
-    let email = document.getElementById('customerEmail').value ? document.getElementById('customerEmail').value : "";
     let createdAtStartDate = document.getElementById('startDate').value ? document.getElementById('startDate').value : "";
     let createdAtEndDate = document.getElementById('endDate').value ? document.getElementById('endDate').value : "";
-    let PMToken = document.getElementById('PMToken').value ? document.getElementById('PMToken').value : "";
 
     let payload = {};
 
@@ -71,10 +65,10 @@ function searchCustomers(button) {
             PMToken
         }
     }
-    fetch('/searchCustomer', {
+    fetch('/searchDispute', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(payload)
         })
@@ -101,12 +95,28 @@ function searchCustomers(button) {
             } else {
                 for (var i = 0; i < data.length; i++) {
                     colorText = "black";
-                    color = "aliceblue";
-                    document.querySelector('.tableContent').innerHTML += "<tr style='color: " + colorText + ";background-color: " + color + ";' class='border-b dark:border-neutral-500'><td class='whitespace-nowrap px-6 py-4'>" + data[i].id + "</td><td><button class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' onclick=\"searchCustomer('" + data[i].id + "')\">GET DETAILS</button></td><td>" + data[i].firstName + "</td><td>" + data[i].lastName + "</td><td>" + data[i].phone + "</td><td>" + data[i].email + "</td><td>" + data[i].createdAt + "</td><td><a class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' href='" + data[i].link + "'>Link to BO</a></td></tr>";
+                    color = data[i].status === "lost" ? "red" : (data[i].status === "won" ? "green" : "aliceblue");
 
+                    document.querySelector('.tableContent').innerHTML += `
+                    <tr style="color: ${colorText}; background-color: ${color};" class="border-b dark:border-neutral-500">
+                        <td class="whitespace-nowrap px-6 py-4">${data[i].id}</td>
+                        <td>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" target="_blank" onclick="searchDispute('${data[i].id}')">
+                            GET DETAILS
+                        </button>
+                        </td>
+                        <td class="whitespace-nowrap px-6 py-4">${data[i].receivedDate}</td>
+                        <td class="whitespace-nowrap px-6 py-4">${data[i].status}</td>
+                        <td class="whitespace-nowrap px-6 py-4">${data[i].reason}</td>
+                        <td>
+                        <a class="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded" target="_blank" href="${data[i].link}">
+                            Link to BO
+                        </a>
+                        </td>
+                    </tr>
+                    `;
                 }
             }
-
         })
         .catch(error => {
             console.error('Une erreur s\'est produite : ', error);

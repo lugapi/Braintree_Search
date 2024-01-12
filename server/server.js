@@ -200,6 +200,51 @@ app.post('/searchCustomer', async (req, res) => {
   }
 });
 
+
+app.post('/searchDispute', async (req, res) => {
+  try {
+    let collection;
+    const resultSearch = [];
+
+    // Vérifier les différents critères de recherche fournis dans le corps de la requête
+    if (req.body.createdAtStartDate && req.body.createdAtEndDate) {
+      // Recherche par plage de dates de création
+      const createdAtStartDate = req.body.createdAtStartDate;
+      const createdAtEndDate = req.body.createdAtEndDate;
+
+      collection = gateway.dispute.search((search) => {
+        search.receivedDate().between(createdAtStartDate, createdAtEndDate);
+      });
+    }
+
+    // Processus des résultats de la recherche
+    collection.on('data', (dispute) => {
+      resultSearch.push({
+        id: dispute.id,
+        receivedDate: dispute.receivedDate,
+        status: dispute.status,
+        reason: dispute.reason,
+        createdAt: dispute.createdAt,
+        link: `https://sandbox.braintreegateway.com/merchants/${BRAINTREE_MERCHANT_ID}/disputes/${dispute.id}`
+      });
+    });
+
+    // Envoyer les résultats de la recherche en tant que réponse JSON lorsque la recherche est terminée
+    collection.on('end', () => {
+      res.json(resultSearch);
+    });
+
+    // Reprendre le flux de recherche
+    collection.resume();
+  } catch (error) {
+    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
+    console.error(error);
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
+  }
+});
+
 // Endpoint pour trouver un client par ID
 app.post('/findCustomer', async (req, res) => {
   try {
@@ -239,10 +284,56 @@ app.post('/findCustomer', async (req, res) => {
   }
 });
 
+app.post('/findDispute', async (req, res) => {
+  try {
+    const disputeId = req.body.disputeId;
+
+    // Vérifier si disputeId est présent dans la requête
+    if (!disputeId) {
+      return res.status(400).json({
+        error: 'Missing disputeId parameter'
+      });
+    }
+
+    // Utiliser la méthode find pour rechercher le client par ID
+    gateway.dispute.find(disputeId, (err, dispute) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({
+          error: 'Internal Server Error'
+        });
+      }
+
+      if (!dispute) {
+        return res.status(404).json({
+          error: 'dispute not found'
+        });
+      }
+
+      // Renvoyer le client trouvé en tant que réponse JSON
+      res.json(dispute);
+    });
+  } catch (error) {
+    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
+    console.error(error);
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
+  }
+});
+
 
 app.get("/transaction", async (req, res) => {
   res.render('template', {
     body: 'transaction',
+    currency: BRAINTREE_CURRENCY,
+    MID: BRAINTREE_MERCHANT_ID,
+  });
+});
+
+app.get("/dispute", async (req, res) => {
+  res.render('template', {
+    body: 'dispute',
     currency: BRAINTREE_CURRENCY,
     MID: BRAINTREE_MERCHANT_ID,
   });

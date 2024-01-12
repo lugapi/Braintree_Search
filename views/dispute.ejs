@@ -1,0 +1,89 @@
+<div class="container mx-auto">
+    <div class="header w-full flex flex-col gap-2">
+        <h1 class="font-bold text-2xl">Braintree Dispute Search</h1>
+        <a href="https://developer.paypal.com/braintree/docs/reference/request/dispute/search/node" target="_blank"
+            class="underline text-blue-600 hover:text-blue-800">Documentation</a>
+    </div>
+
+    <div id="accordion" class="p-5">
+
+        <div class="relative flex flex-col min-w-0 rounded break-words border bg-white border-1 border-gray-300">
+            <div class="py-3 px-6 mb-0 bg-gray-200 border-b-1 border-gray-300 text-gray-900" id="headingCreatedAt">
+                <h5 class="mb-0">
+                    <button
+                        class="inline-block align-middle text-center select-none border font-normal whitespace-no-wrap rounded py-1 px-3 leading-normal no-underline font-normal text-blue-700 bg-transparent"
+                        data-toggle="collapse" data-target="#collapseCreatedAt" aria-expanded="true"
+                        aria-controls="collapseCreatedAt" onclick="toggleCollapse('collapseCreatedAt')">
+                        Created At
+                    </button>
+                </h5>
+            </div>
+            <div id="collapseCreatedAt" class="hidden" aria-labelledby="headingCreatedAt" data-parent="#accordion">
+                <div class="flex-auto p-6">
+                    <div class="my-2">
+                        <label for="end_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Presets
+                            :</label>
+                        <div class="flex">
+                            <button type="button" id="todayButton"
+                                class="mr-2 p-2 bg-green-500 text-white rounded-md">Today</button>
+                            <button type="button" id="yesterdayButton"
+                                class="mr-2 p-2 bg-green-500 text-white rounded-md">Yesterday</button>
+                            <button type="button" id="last7DaysButton"
+                                class="mr-2 p-2 bg-green-500 text-white rounded-md">Last 7 Days</button>
+                            <button type="button" id="lastMonthButton"
+                                class="p-2 mr-2 bg-green-500 text-white rounded-md">Last Month</button>
+                            <button type="button" id="lastYearButton"
+                                class="p-2 bg-green-500 text-white rounded-md">Last Year</button>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label for="startDate">Start Date:</label>
+                        <input id="startDate"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                            type="datetime-local">
+                    </div>
+                    <div class="mb-4">
+                        <label for="endDate">End Date:</label>
+                        <input id="endDate"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                            type="datetime-local">
+                    </div>
+                    <input type="button" value="Search Customers"
+                        class="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                        data-search-type="createdAt" onclick="searchCustomers(this)">
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="flex flex-wrap">
+        <div class="result w-full overflow-x-auto" hidden>
+            <br><br><br>
+            <p id="nbRowP" hidden>Number of rows : <span id="nbRowS" hidden></span></p>
+            <table class="min-w-full text-left text-sm font-light mb-4">
+                <thead class="border-b font-medium dark:border-neutral-500 text-center">
+                    <tr>
+                        <th class="px-6 py-4">ID</th>
+                        <th class="px-6 py-4">All details</th>
+                        <th class="px-6 py-4">Received Date</th>
+                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Reason</th>
+                        <th class="px-6 py-4">Link</th>
+                    </tr>
+                </thead>
+                <tbody class="tableContent text-center">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="disputeResult">
+        <pre id="disputeInfo" class="hidden"></pre>
+    </div>
+</div>
+
+<script>
+    const mid = '<%= MID %>'
+</script>
+
+<script src="dispute.js"></script>
