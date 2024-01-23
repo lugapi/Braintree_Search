@@ -48,7 +48,7 @@ function setDateRange(startOffset, endOffset) {
 
     endDate.setUTCDate(endDate.getUTCDate() - endOffset);
 
-    // Si l'offset de fin est 0 (aujourd'hui), inclure l'heure actuelle
+    // If the end offset is 0 (today), include the current hour
     if (endOffset === 0) {
         endDate.setUTCHours(new Date().getUTCHours(), new Date().getUTCMinutes(), new Date().getUTCSeconds(), new Date().getUTCMilliseconds());
     } else {
