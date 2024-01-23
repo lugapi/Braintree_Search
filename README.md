@@ -1,4 +1,4 @@
-# Braintree Transaction Sale
+# Braintree Search customer, transaction, dispute
 
 Braintree documentation: [https://developer.paypal.com/braintree/docs/reference/general/searching/search-fields/node](https://developer.paypal.com/braintree/docs/reference/general/searching/search-fields/node)
 
