@@ -96,7 +96,7 @@ app.post("/searchTransaction", async (req, res) => {
     collection.on("data", (transaction) => {
       resultSearch.push({
         id: transaction.id,
-        orderid: transaction.id,
+        orderid: transaction.orderId,
         date: transaction.createdAt,
         status: transaction.status,
         amount: transaction.amount,
