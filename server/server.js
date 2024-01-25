@@ -48,6 +48,23 @@ function mapStatusFields(statusArray) {
   return statusArray.map(mapStatusField);
 }
 
+// Method to refund a transaction based on ID
+app.post("/refundTransaction", async (req, res) => {
+  try {
+    console.log(req.body);
+    // const transactionAmount = req.body.amountToRefund;
+    const transactionId = req.body.transactionId;
+    const amount = req.body.amount;
+
+    // Use the gateway.transaction.refund method with or without the amount
+    const result = await gateway.transaction.refund(transactionId, amount);
+
+    res.json(result);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Handle POST request for searching transactions
 app.post("/searchTransaction", async (req, res) => {
   try {
@@ -97,6 +114,7 @@ app.post("/searchTransaction", async (req, res) => {
       resultSearch.push({
         id: transaction.id,
         orderid: transaction.orderId,
+        type: transaction.type,
         date: transaction.createdAt,
         status: transaction.status,
         amount: transaction.amount,
@@ -122,15 +140,15 @@ app.post("/searchTransaction", async (req, res) => {
   }
 });
 
-// Endpoint pour gérer la recherche des clients
+// Endpoint to manage the search for customers
 app.post('/searchCustomer', async (req, res) => {
   try {
     let collection;
     const resultSearch = [];
 
-    // Vérifier les différents critères de recherche fournis dans le corps de la requête
+    // Verify the search criteria provided in the request body
     if (req.body.firstName && req.body.lastName) {
-      // Recherche par prénom et nom de famille
+      // Search by first name and last name
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
 
@@ -139,14 +157,14 @@ app.post('/searchCustomer', async (req, res) => {
         search.lastName().is(lastName);
       });
     } else if (req.body.customerId) {
-      // Recherche par ID client
+      // Search by customer ID
       const customerId = req.body.customerId;
 
       collection = gateway.customer.search((search) => {
         search.id().is(customerId);
       });
     } else if (req.body.email) {
-      // Recherche par e-mail client
+      // Search by email
       const customerEmail = req.body.email;
 
       console.log(req.body.email)
@@ -155,7 +173,7 @@ app.post('/searchCustomer', async (req, res) => {
         search.email().is(customerEmail);
       });
     } else if (req.body.createdAtStartDate && req.body.createdAtEndDate) {
-      // Recherche par plage de dates de création
+      // Search by creation date
       const createdAtStartDate = req.body.createdAtStartDate;
       const createdAtEndDate = req.body.createdAtEndDate;
 
@@ -163,7 +181,7 @@ app.post('/searchCustomer', async (req, res) => {
         search.createdAt().between(createdAtStartDate, createdAtEndDate);
       });
     } else if (req.body.PMToken) {
-      // Recherche par PM Token
+      // Search by payment method token
       const PMToken = req.body.PMToken;
 
       collection = gateway.customer.search((search) => {
@@ -171,7 +189,7 @@ app.post('/searchCustomer', async (req, res) => {
       });
     }
 
-    // Processus des résultats de la recherche
+    // Processus of the search results
     collection.on('data', (customer) => {
       resultSearch.push({
         id: customer.id,
@@ -184,15 +202,15 @@ app.post('/searchCustomer', async (req, res) => {
       });
     });
 
-    // Envoyer les résultats de la recherche en tant que réponse JSON lorsque la recherche est terminée
+    // Send the search results as a JSON response when the search is complete
     collection.on('end', () => {
       res.json(resultSearch);
     });
 
-    // Reprendre le flux de recherche
+    // Resume the search stream
     collection.resume();
   } catch (error) {
-    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
+    // Handle errors and send a 500 Internal Server Error response
     console.error(error);
     res.status(500).json({
       error: 'Internal Server Error'
@@ -206,9 +224,9 @@ app.post('/searchDispute', async (req, res) => {
     let collection;
     const resultSearch = [];
 
-    // Vérifier les différents critères de recherche fournis dans le corps de la requête
+    // Verify the search criteria provided in the request body
     if (req.body.createdAtStartDate && req.body.createdAtEndDate) {
-      // Recherche par plage de dates de création
+      // Search by creation date
       const createdAtStartDate = req.body.createdAtStartDate;
       const createdAtEndDate = req.body.createdAtEndDate;
 
@@ -217,7 +235,7 @@ app.post('/searchDispute', async (req, res) => {
       });
     }
 
-    // Processus des résultats de la recherche
+    // Processus of the search results
     collection.on('data', (dispute) => {
       resultSearch.push({
         id: dispute.id,
@@ -229,15 +247,14 @@ app.post('/searchDispute', async (req, res) => {
       });
     });
 
-    // Envoyer les résultats de la recherche en tant que réponse JSON lorsque la recherche est terminée
+    // Send the search results as a JSON response when the search is complete
     collection.on('end', () => {
       res.json(resultSearch);
     });
 
-    // Reprendre le flux de recherche
+    // Resume the search stream
     collection.resume();
   } catch (error) {
-    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
     console.error(error);
     res.status(500).json({
       error: 'Internal Server Error'
@@ -245,19 +262,18 @@ app.post('/searchDispute', async (req, res) => {
   }
 });
 
-// Endpoint pour trouver un client par ID
+// Endpoint to find a customer by ID
 app.post('/findCustomer', async (req, res) => {
   try {
     const customerId = req.body.customerId;
-
-    // Vérifier si customerId est présent dans la requête
+    // Verify that customerId is provided in the request
     if (!customerId) {
       return res.status(400).json({
         error: 'Missing customerId parameter'
       });
     }
 
-    // Utiliser la méthode find pour rechercher le client par ID
+    // Use the gateway.customer.find method
     gateway.customer.find(customerId, (err, customer) => {
       if (err) {
         console.error(err);
@@ -272,11 +288,11 @@ app.post('/findCustomer', async (req, res) => {
         });
       }
 
-      // Renvoyer le client trouvé en tant que réponse JSON
+      // Send back the customer as a JSON response
       res.json(customer);
     });
   } catch (error) {
-    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
+    // Handle errors
     console.error(error);
     res.status(500).json({
       error: 'Internal Server Error'
@@ -287,15 +303,14 @@ app.post('/findCustomer', async (req, res) => {
 app.post('/findDispute', async (req, res) => {
   try {
     const disputeId = req.body.disputeId;
-
-    // Vérifier si disputeId est présent dans la requête
+    // Verify that disputeId is provided in the request
     if (!disputeId) {
       return res.status(400).json({
         error: 'Missing disputeId parameter'
       });
     }
 
-    // Utiliser la méthode find pour rechercher le client par ID
+    // Use the gateway.customer.find method
     gateway.dispute.find(disputeId, (err, dispute) => {
       if (err) {
         console.error(err);
@@ -310,11 +325,9 @@ app.post('/findDispute', async (req, res) => {
         });
       }
 
-      // Renvoyer le client trouvé en tant que réponse JSON
       res.json(dispute);
     });
   } catch (error) {
-    // Gérer les erreurs et envoyer une réponse 500 Internal Server Error
     console.error(error);
     res.status(500).json({
       error: 'Internal Server Error'
