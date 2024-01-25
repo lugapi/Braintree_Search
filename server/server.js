@@ -107,7 +107,12 @@ app.post("/searchTransaction", async (req, res) => {
       collection = gateway.transaction.search((search) => {
         search.createdAt().between(from, to);
       });
+    }else if (req.body.orderId) {
+      collection = gateway.transaction.search((search) => {
+        search.orderId().contains(req.body.orderId);
+      });
     }
+
 
     // Process search results
     collection.on("data", (transaction) => {
@@ -120,7 +125,8 @@ app.post("/searchTransaction", async (req, res) => {
         amount: transaction.amount,
         customer: transaction.customer,
         paymentInstrumentType: transaction.paymentInstrumentType,
-        link: `https://sandbox.braintreegateway.com/merchants/${BRAINTREE_MERCHANT_ID}/transactions/${transaction.id}`
+        link: `https://sandbox.braintreegateway.com/merchants/${BRAINTREE_MERCHANT_ID}/transactions/${transaction.id}`,
+        refundsASsociated: transaction.refundIds
       });
     });
 

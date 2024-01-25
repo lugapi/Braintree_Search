@@ -29,6 +29,8 @@ function searchResult(searchfield) {
     var startDate = document.querySelector('#startDate').value
     var endDate = document.querySelector('#endDate').value
 
+    var orderId = document.querySelector('#orderId').value
+
     var http = new XMLHttpRequest();
     var url = 'searchTransaction';
 
@@ -54,6 +56,11 @@ function searchResult(searchfield) {
         var data = {
             from: startDate,
             to: endDate
+        };
+    } else if (searchfield == "orderID") {
+        console.log('orderID')
+        var data = {
+            orderId: orderId,
         };
     }
 
@@ -108,7 +115,12 @@ function searchResult(searchfield) {
 
                 refundButtonHtml += "</td>";
 
-                document.querySelector('.tableContent').innerHTML += "<tr style='color: " + colorText + ";background-color: " + color + ";' class='border-b dark:border-neutral-500'><td class='whitespace-nowrap px-6 py-4'>" + response[i].id + "</td><td>" + response[i].orderid + "</td><td>" + response[i].date + "</td><td>" + response[i].type + "</td><td>" + response[i].status + "</td><td>" + response[i].amount + "</td><td>" + response[i].paymentInstrumentType + "</td><td><a class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' href='" + response[i].link + "'>Link to BO</a></td>" + refundButtonHtml + "</tr>";
+
+                if(response[i].refundsASsociated){
+                    refundsASsociated = "<td>" + response[i].refundsASsociated + "</td>";
+                }
+
+                document.querySelector('.tableContent').innerHTML += "<tr style='color: " + colorText + ";background-color: " + color + ";' class='border-b dark:border-neutral-500'><td class='whitespace-nowrap px-6 py-4'>" + response[i].id + "</td><td>" + response[i].orderid + "</td><td>" + response[i].date + "</td><td>" + response[i].type + "</td><td>" + response[i].status + "</td><td>" + response[i].amount + "</td><td>" + response[i].paymentInstrumentType + "</td><td style='min-width: 150px'><a class='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' target='_blank' href='" + response[i].link + "'>Link to BO</a></td>" + refundsASsociated + refundButtonHtml + "</tr>";
 
 
             }
@@ -143,7 +155,6 @@ document.addEventListener('click', function (event) {
     if (event.target.classList.contains('refund-btn')) {
         var transactionId = event.target.getAttribute('data-transaction-id');
         var transactionAmount = event.target.getAttribute('data-transaction-amount');
-        var refundAmountInput = event.target.parentNode.querySelector('.refund-amount-input');
         var amountToRefund = event.target.parentNode.querySelector('#amountToRefund').value;
 
         // Call the NodeJS API to partial refund
