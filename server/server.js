@@ -116,6 +116,7 @@ app.post("/searchTransaction", async (req, res) => {
 
     // Process search results
     collection.on("data", (transaction) => {
+      console.log(transaction.refundIds)
       resultSearch.push({
         id: transaction.id,
         orderid: transaction.orderId,
@@ -126,7 +127,7 @@ app.post("/searchTransaction", async (req, res) => {
         customer: transaction.customer,
         paymentInstrumentType: transaction.paymentInstrumentType,
         link: `https://sandbox.braintreegateway.com/merchants/${BRAINTREE_MERCHANT_ID}/transactions/${transaction.id}`,
-        refundsASsociated: transaction.refundIds
+        refundsAssociated: transaction.refundIds
       });
     });
 
@@ -139,6 +140,44 @@ app.post("/searchTransaction", async (req, res) => {
     collection.resume();
   } catch (error) {
     // Handle errors and send a 500 Internal Server Error response
+    console.error(error);
+    res.status(500).json({
+      error: 'Internal Server Error'
+    });
+  }
+});
+
+// Endpoint to find a transaction by ID
+app.post('/findTransaction', async (req, res) => {
+  try {
+    const transactionId = req.body.transactionId;
+    // Verify that transactionId is provided in the request
+    if (!transactionId) {
+      return res.status(400).json({
+        error: 'Missing transactionId parameter'
+      });
+    }
+
+    // Use the gateway.transaction.find method
+    gateway.transaction.find(transactionId, (err, transaction) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({
+          error: 'Internal Server Error'
+        });
+      }
+
+      if (!transaction) {
+        return res.status(404).json({
+          error: 'Transaction not found'
+        });
+      }
+
+      // Send back the transaction as a JSON response
+      res.json(transaction);
+    });
+  } catch (error) {
+    // Handle errors
     console.error(error);
     res.status(500).json({
       error: 'Internal Server Error'

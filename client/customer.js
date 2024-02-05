@@ -3,7 +3,7 @@ function searchCustomer(id) {
 
     var customerId = id;
 
-    // Utiliser la fonction fetch pour envoyer une requête POST
+    // Use the fetch method to send a POST request
     fetch("/findCustomer", {
             method: 'POST',
             headers: {
@@ -24,10 +24,15 @@ function searchCustomer(id) {
             console.log(data);
             document.getElementById('customerInfo').innerHTML = prettyPrintObject(data);
             document.getElementById('customerInfo').classList.remove('hidden');
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-            });
+
+            var elementToScrollTo = document.getElementById('customerInfo');
+
+            if (elementToScrollTo) {
+                window.scrollTo({
+                    top: elementToScrollTo.offsetTop,
+                    behavior: 'smooth',
+                });
+            }
         })
         .catch(error => {
             alert(`An error occurred: ${error.message}`);
@@ -51,7 +56,7 @@ function searchCustomers(button) {
 
     let payload = {};
 
-    // Utilisez la valeur de searchType pour déterminer le type de recherche à effectuer
+    // Use the value of searchType to determine the type of search to perform
     if (searchType === 'name') {
         payload = {
             firstName,
@@ -80,7 +85,7 @@ function searchCustomers(button) {
         })
         .then(response => response.json())
         .then(data => {
-            // Traitez les données de réponse et mettez à jour votre interface utilisateur.
+            // Process the data here
             console.log(data);
 
             //SHOW TABLE AND REMOVE LOADING
