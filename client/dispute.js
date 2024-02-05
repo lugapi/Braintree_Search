@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     document.getElementById('lastMonthButton').addEventListener('click', function () {
-        setDateRange(0, 30);
+        setDateRange(30, 0);
     });
     
     document.getElementById('lastYearButton').addEventListener('click', function () {
