@@ -125,6 +125,7 @@ app.post("/searchTransaction", async (req, res) => {
         status: transaction.status,
         amount: transaction.amount,
         customer: transaction.customer,
+        refundedTransactionId: transaction.refundedTransactionId,
         paymentInstrumentType: transaction.paymentInstrumentType,
         link: `https://sandbox.braintreegateway.com/merchants/${BRAINTREE_MERCHANT_ID}/transactions/${transaction.id}`,
         refundsAssociated: transaction.refundIds
